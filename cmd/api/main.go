@@ -10,6 +10,7 @@ import (
 	"time"
 
 	"go-qfs/internal/server"
+	"go-qfs/internal/server/config"
 )
 
 func gracefulShutdown(apiServer *http.Server, done chan bool) {
@@ -38,7 +39,7 @@ func gracefulShutdown(apiServer *http.Server, done chan bool) {
 }
 
 func main() {
-
+	config.Load()
 	server := server.NewServer()
 
 	// Create a done channel to signal when the shutdown is complete

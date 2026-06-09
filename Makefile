@@ -24,7 +24,7 @@ clean:
 	@rm -f main
 
 prepare:
-	@cd frontend && bun install
+	@cd frontend && bun install && bun run build
 	@go mod tidy && cp .env.example .env
 
 # Live Reload

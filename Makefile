@@ -23,6 +23,10 @@ clean:
 	@echo "Cleaning..."
 	@rm -f main
 
+prepare:
+	@cd frontend && bun install
+	@go mod tidy && cp .env.example .env
+
 # Live Reload
 dev:
 	@cd frontend && bun dev & \

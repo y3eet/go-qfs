@@ -3,16 +3,17 @@ package handlers
 import (
 	"go-qfs/internal/server/config"
 	"os"
+	"path/filepath"
 
 	"github.com/gin-gonic/gin"
 )
 
 type FileHandler struct{}
 type FileInfo struct {
-	Name    string `json:"name"`
-	IsDir   bool   `json:"is_dir"`
-	Size    int64  `json:"size"`
-	ModTime int64  `json:"mod_time,omitempty"`
+	Name  string `json:"name"`
+	IsDir bool   `json:"is_dir"`
+	Size  int64  `json:"size"`
+	Ext   string `json:"ext,omitempty"`
 }
 
 func NewFileHandler() *FileHandler {
@@ -33,12 +34,11 @@ func (h *FileHandler) GetFiles(c *gin.Context) {
 			continue
 		}
 		files = append(files, FileInfo{
-			Name:    entry.Name(),
-			IsDir:   entry.IsDir(),
-			Size:    info.Size(),
-			ModTime: info.ModTime().Unix(),
+			Name:  entry.Name(),
+			IsDir: entry.IsDir(),
+			Size:  info.Size(),
+			Ext:   filepath.Ext(entry.Name()),
 		})
 	}
-
-	c.JSON(200, gin.H{"files": files})
+	c.JSON(200, files)
 }

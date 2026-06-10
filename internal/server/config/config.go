@@ -8,12 +8,10 @@ import (
 )
 
 type Config struct {
-	Port         string
-	JWTSecret    string
-	AppEnv       string
-	FrontendURL  string
-	BuildVersion string
-	RootKey      string
+	Port        string
+	AppEnv      string
+	FrontendURL string
+	BaseDir     string
 }
 
 var Cfg *Config
@@ -27,9 +25,10 @@ func Load() *Config {
 	}
 
 	Cfg = &Config{
-		Port:         getEnv("PORT", "8080"),
-		AppEnv:       getEnv("APP_ENV", "dev"),
-		FrontendURL:  getEnv("FRONTEND_URL", "http://localhost:5173"),
+		Port:        getEnv("PORT", "8080"),
+		AppEnv:      getEnv("APP_ENV", "dev"),
+		FrontendURL: getEnv("FRONTEND_URL", "http://localhost:5173"),
+		BaseDir:     getEnv("BASE_DIR", "./"),
 	}
 	return Cfg
 }

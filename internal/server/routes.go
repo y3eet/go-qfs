@@ -1,6 +1,7 @@
 package server
 
 import (
+	"go-qfs/internal/server/handlers"
 	"go-qfs/static"
 	"io/fs"
 	"net/http"
@@ -19,12 +20,10 @@ func (s *Server) RegisterRoutes() http.Handler {
 		AllowHeaders:     []string{"Accept", "Authorization", "Content-Type"},
 		AllowCredentials: true, // Enable cookies/auth
 	}))
-
+	fileHandler := handlers.NewFileHandler()
 	api := r.Group("/api")
 	{
-		api.GET("/hello", func(c *gin.Context) {
-			c.JSON(200, gin.H{"message": "hello"})
-		})
+		api.GET("/files", fileHandler.GetFiles)
 	}
 
 	sub, _ := fs.Sub(static.Files, "dist")

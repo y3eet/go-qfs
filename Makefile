@@ -4,10 +4,13 @@
 all: build test
 
 build:
-	@echo "Building Frontend..."
-	@cd frontend && bun run build
-	@echo "Building Backend..."
+	@echo "Building..."
 	@go build -o main cmd/api/main.go
+
+build-all:
+	@echo "Building all..."
+	@go build -o main cmd/api/main.go
+	@cd frontend && bun install && bun run build
 
 # Run the application
 run:

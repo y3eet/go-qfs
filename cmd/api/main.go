@@ -9,8 +9,8 @@ import (
 	"syscall"
 	"time"
 
+	"go-qfs/internal/config"
 	"go-qfs/internal/server"
-	"go-qfs/internal/server/config"
 )
 
 func gracefulShutdown(apiServer *http.Server, done chan bool) {

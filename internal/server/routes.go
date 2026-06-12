@@ -1,7 +1,7 @@
 package server
 
 import (
-	"go-qfs/internal/server/handlers"
+	"go-qfs/internal/handlers"
 	"go-qfs/static"
 	"io/fs"
 	"net/http"

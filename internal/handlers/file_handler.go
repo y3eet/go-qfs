@@ -1,7 +1,7 @@
 package handlers
 
 import (
-	"go-qfs/internal/server/config"
+	"go-qfs/internal/config"
 	"os"
 	"path/filepath"
 

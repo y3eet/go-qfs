@@ -2,8 +2,10 @@ package handlers
 
 import (
 	"go-qfs/internal/config"
+	"net/http"
 	"os"
 	"path/filepath"
+	"strings"
 
 	"github.com/gin-gonic/gin"
 )
@@ -41,4 +43,25 @@ func (h *FileHandler) GetFiles(c *gin.Context) {
 		})
 	}
 	c.JSON(200, files)
+}
+
+func (h *FileHandler) DowndloadFile(c *gin.Context) {
+
+	baseDir := config.Cfg.BaseDir
+	relativePath := strings.TrimPrefix(c.Param("filepath"), "/")
+	filename := filepath.Base(relativePath)
+
+	absBase, _ := filepath.Abs(baseDir)
+	absFile, err := filepath.Abs(filepath.Join(baseDir, relativePath))
+	if err != nil || !strings.HasPrefix(absFile, absBase+string(filepath.Separator)) {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "invalid path"})
+		return
+	}
+
+	if _, err := os.Stat(absFile); os.IsNotExist(err) {
+		c.JSON(http.StatusNotFound, gin.H{"error": "file not found"})
+		return
+	}
+
+	c.FileAttachment(absFile, filename)
 }

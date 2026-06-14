@@ -1,10 +1,19 @@
 <script lang="ts">
     import { Download, EllipsisVertical } from "@lucide/svelte";
     import type { FileType } from "../types";
+    import { downloadFile } from "../utils/api";
     interface Props {
         file: FileType;
     }
     let { file }: Props = $props();
+
+    async function handleDowndloadFile(file: string) {
+        try {
+            await downloadFile(file);
+        } catch (e) {
+            console.error(e);
+        }
+    }
 </script>
 
 <section>
@@ -24,7 +33,9 @@
                     tabindex="-1"
                     class="dropdown-content menu bg-base-100 rounded-box z-1 w-52 p-2 shadow-sm"
                 >
-                    <button class="btn btn-ghost"
+                    <button
+                        onclick={() => handleDowndloadFile(file.name)}
+                        class="btn btn-ghost"
                         ><Download size={18} />Download</button
                     >
                 </ul>

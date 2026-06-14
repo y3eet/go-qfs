@@ -24,6 +24,7 @@ func (s *Server) RegisterRoutes() http.Handler {
 	api := r.Group("/api")
 	{
 		api.GET("/files", fileHandler.GetFiles)
+		api.GET("/file/download/*filepath", fileHandler.DowndloadFile)
 	}
 
 	sub, _ := fs.Sub(static.Files, "dist")

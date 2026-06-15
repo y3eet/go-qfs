@@ -2,6 +2,7 @@
     import { Download, EllipsisVertical } from "@lucide/svelte";
     import type { FileType } from "../types";
     import { downloadFile } from "../utils/api";
+    import { MIMES } from "../constants";
     interface Props {
         file: FileType;
     }
@@ -14,19 +15,30 @@
             console.error(e);
         }
     }
+    const mime = $derived(
+        MIMES[file.is_dir ? "dir" : file.ext] ?? MIMES["default"],
+    );
+    const Icon = $derived(mime?.icon);
 </script>
 
 <section>
-    <li class="list-row flex items-center justify-between px-6 hover:bg-base-200 rounded-lg">
-        <button onclick={() => {}}>
-            {file.name}
-        </button>
+    <li
+        class="list-row flex items-center justify-between px-2 md:px-4 lg:px-6 hover:bg-base-200 rounded-lg"
+    >
+        <div class="flex gap-2">
+            <Icon />
+            <div class="flex flex-col items-start">
+                <span class="font-bold">
+                    {file.name}
+                </span>
+                <span class="text-xs text-gray-500">
+                    {file.size} bytes
+                </span>
+            </div>
+        </div>
         {#if !file.is_dir}
             <div class="dropdown dropdown-bottom dropdown-end">
-                <button
-                    tabindex="0"
-                    class="btn btn-ghost hover:cursor-pointer"
-                >
+                <button tabindex="0" class="btn btn-ghost hover:cursor-pointer">
                     <EllipsisVertical size={18} />
                 </button>
                 <ul

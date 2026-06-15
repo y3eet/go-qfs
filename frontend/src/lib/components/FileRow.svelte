@@ -17,7 +17,7 @@
 </script>
 
 <section>
-    <li class="list-row flex items-center justify-between px-6">
+    <li class="list-row flex items-center justify-between px-6 hover:bg-base-200 rounded-lg">
         <button onclick={() => {}}>
             {file.name}
         </button>
@@ -25,7 +25,7 @@
             <div class="dropdown dropdown-bottom dropdown-end">
                 <button
                     tabindex="0"
-                    class="btn btn-ghost m-1 hover:cursor-pointer"
+                    class="btn btn-ghost hover:cursor-pointer"
                 >
                     <EllipsisVertical size={18} />
                 </button>

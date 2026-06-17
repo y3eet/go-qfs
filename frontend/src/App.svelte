@@ -4,26 +4,29 @@
     import Header from "./lib/components/Header.svelte";
     import type { FileType } from "./lib/types";
     import FilesList from "./lib/components/FilesList.svelte";
-
+    import { directory } from "./lib/state/directory.svelte";
     let files: FileType[] = $state([]);
     let fetchLoading = $state(true);
-    let dir = "";
 
-    async function fetchFiles() {
+    async function fetchFiles(dir: string[]) {
         fetchLoading = true;
-        const f = await getFiles();
+        const f = await getFiles(dir.join("/"));
         files = f;
         fetchLoading = false;
     }
     $effect(() => {
-        fetchFiles();
+        fetchFiles(directory);
     });
 </script>
 
 <section>
     <Header />
     <div class="breadcrumbs text-sm mx-4 my-3">
-        <ul></ul>
+        <ul>
+            {#each directory as dir}
+                <li>{dir}</li>
+            {/each}
+        </ul>
     </div>
     {#if fetchLoading}
         <div class="flex items-center justify-center h-64">

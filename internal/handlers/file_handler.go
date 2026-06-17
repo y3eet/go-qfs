@@ -23,7 +23,8 @@ func NewFileHandler() *FileHandler {
 }
 
 func (h *FileHandler) GetFiles(c *gin.Context) {
-	entries, err := os.ReadDir(config.Cfg.BaseDir)
+	path := c.Query("path")
+	entries, err := os.ReadDir(config.Cfg.BaseDir + path)
 	if err != nil {
 		c.JSON(500, gin.H{"error": "Failed to read directory"})
 		return

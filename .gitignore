@@ -33,3 +33,6 @@ main
 .DS_Store
 
 dist
+build/bin
+node_modules
+frontend/dist

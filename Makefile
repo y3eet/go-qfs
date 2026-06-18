@@ -9,12 +9,12 @@ build:
 
 build-all:
 	@echo "Building all..."
-	@go build -o main cmd/api/main.go
 	@cd frontend && bun install && bun run build
+	@go build -o main cmd/api/main.go
 
 # Run the application
 run:
-	@go run cmd/api/main.go
+	@go run main.go
 
 # Test the application
 test:

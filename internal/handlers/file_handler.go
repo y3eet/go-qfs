@@ -1,6 +1,7 @@
 package handlers
 
 import (
+	"fmt"
 	"go-qfs/internal/config"
 	"net/http"
 	"os"
@@ -46,19 +47,19 @@ func (h *FileHandler) GetFiles(c *gin.Context) {
 	c.JSON(200, files)
 }
 
-func (h *FileHandler) DowndloadFile(c *gin.Context) {
-
-	baseDir := config.Cfg.BaseDir
+func (h *FileHandler) DownloadFile(c *gin.Context) {
+	fmt.Printf("Received download request for: %s\n", c.Param("filepath"))
 	relativePath := strings.TrimPrefix(c.Param("filepath"), "/")
+	baseDir := config.Cfg.BaseDir
 	filename := filepath.Base(relativePath)
 
 	absBase, _ := filepath.Abs(baseDir)
 	absFile, err := filepath.Abs(filepath.Join(baseDir, relativePath))
+
 	if err != nil || !strings.HasPrefix(absFile, absBase+string(filepath.Separator)) {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "invalid path"})
 		return
 	}
-
 	if _, err := os.Stat(absFile); os.IsNotExist(err) {
 		c.JSON(http.StatusNotFound, gin.H{"error": "file not found"})
 		return

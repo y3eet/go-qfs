@@ -11,7 +11,9 @@
 
     async function handleDowndloadFile(file: string) {
         try {
-            await downloadFile(file);
+            const formattedDirectory =
+                directory.length > 0 ? directory.join("/") + "/" : "";
+            await downloadFile(formattedDirectory + file);
         } catch (e) {
             console.error(e);
         }

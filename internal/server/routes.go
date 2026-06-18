@@ -24,7 +24,7 @@ func (s *Server) RegisterRoutes() http.Handler {
 	fileHandler := handlers.NewFileHandler()
 	api := r.Group("/api")
 	{
-		api.GET("/file/download/*filepath", fileHandler.DowndloadFile)
+		api.GET("/file/download/*filepath", fileHandler.DownloadFile)
 		api.GET("/files", fileHandler.GetFiles)
 	}
 

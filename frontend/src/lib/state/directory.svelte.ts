@@ -1,1 +1,1 @@
-export const directory = $state([""]);
+export let directory = $state([]);

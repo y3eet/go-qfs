@@ -5,6 +5,8 @@
     import type { FileType } from "./lib/types";
     import FilesList from "./lib/components/FilesList.svelte";
     import { directory } from "./lib/state/directory.svelte";
+    import { House } from "@lucide/svelte";
+
     let files: FileType[] = $state([]);
     let fetchLoading = $state(true);
 
@@ -22,9 +24,21 @@
 <section>
     <Header />
     <div class="breadcrumbs text-sm mx-4 my-3">
-        <ul>
-            {#each directory as dir}
-                <li>{dir}</li>
+        <ul class="flex items-center">
+            <li>
+                <button onclick={() => directory.splice(0, directory.length)}>
+                    <House size={18} />
+                </button>
+            </li>
+            {#each directory as dir, i}
+                <li>
+                    <button
+                        onclick={() =>
+                            directory.splice(i + 1, directory.length - i)}
+                        class="btn btn-link btn-sm text-sm text-primary p-0"
+                        >{dir}</button
+                    >
+                </li>
             {/each}
         </ul>
     </div>

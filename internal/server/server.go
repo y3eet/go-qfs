@@ -2,8 +2,8 @@ package server
 
 import (
 	"fmt"
+	"go-qfs/internal/config"
 	"net/http"
-	"os"
 	"strconv"
 	"time"
 
@@ -15,7 +15,7 @@ type Server struct {
 }
 
 func NewServer() *http.Server {
-	port, _ := strconv.Atoi(os.Getenv("PORT"))
+	port, _ := strconv.Atoi(config.Cfg.Port)
 	NewServer := &Server{
 		port: port,
 	}

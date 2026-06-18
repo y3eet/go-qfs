@@ -27,6 +27,7 @@ clean:
 	@rm -f main
 
 prepare:
+	@go install github.com/wailsapp/wails/v2/cmd/wails@latest
 	@cd frontend && bun install && bun run build
 	@go mod tidy && cp .env.example .env
 

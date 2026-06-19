@@ -42,14 +42,24 @@ func getLocalIP() (string, error) {
 	return localAddr.IP.String(), nil
 }
 
-func (a *App) GetServerInfo() map[string]interface{} {
+type ServerInfo struct {
+	Port string `json:"port"`
+	IP   string `json:"ip"`
+	Env  string `json:"env"`
+	Host string `json:"host"`
+}
+
+func (a *App) GetServerInfo() ServerInfo {
 	ip, err := getLocalIP()
 	if err != nil {
 		fmt.Println("Error getting local IP:", err)
 		ip = "unknown"
 	}
-	return map[string]interface{}{
-		"port": config.Cfg.Port,
-		"ip":   ip,
+	return ServerInfo{
+		Port: config.Cfg.Port,
+		IP:   ip,
+		Env:  config.Cfg.AppEnv,
+		Host: fmt.Sprintf("%s:%s", ip, config.Cfg.Port),
 	}
+
 }

@@ -27,8 +27,8 @@
 </script>
 
 <section class="flex justify-center">
-    <div class="card bg-base-100 w-96 shadow-md border border-base-200">
-        <figure class="bg-base-200/40 pt-6">
+    <div class="card bg-base-100 w-full mt-2 shadow-md border border-base-200">
+        <figure class="bg-base-200/40 py-4">
             <div class="bg-white p-3 rounded-xl shadow-sm">
                 <img
                     src={qr}

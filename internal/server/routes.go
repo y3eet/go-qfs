@@ -13,17 +13,17 @@ import (
 
 func (s *Server) RegisterRoutes() http.Handler {
 	r := gin.Default()
-
 	r.Use(cors.New(cors.Config{
 		AllowOrigins:     []string{"http://localhost:5173"},
 		AllowMethods:     []string{"GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH"},
-		AllowHeaders:     []string{"Accept", "Authorization", "Content-Type"},
+		AllowHeaders:     []string{"Accept", "Authorization", "Content-Type", "X-Filename"},
 		AllowCredentials: true,
 	}))
 
 	fileHandler := handlers.NewFileHandler()
 	api := r.Group("/api")
 	{
+		api.POST("/file/upload", fileHandler.UploadFile)
 		api.GET("/file/download/*filepath", fileHandler.DownloadFile)
 		api.GET("/files", fileHandler.GetFiles)
 	}

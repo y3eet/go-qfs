@@ -3,6 +3,7 @@ package handlers
 import (
 	"fmt"
 	"go-qfs/internal/config"
+	"io"
 	"net/http"
 	"os"
 	"path/filepath"
@@ -66,4 +67,58 @@ func (h *FileHandler) DownloadFile(c *gin.Context) {
 	}
 
 	c.FileAttachment(absFile, filename)
+}
+
+func (h *FileHandler) UploadFile(c *gin.Context) {
+	filename := c.GetHeader("X-Filename")
+	uploadDir := config.Cfg.BaseDir + c.Query("path")
+	if filename == "" {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "missing X-Filename header"})
+		return
+	}
+
+	dstPath, err := safeDestPath(uploadDir, filename)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
+	dst, err := os.Create(dstPath)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "failed to create file"})
+		return
+	}
+	defer dst.Close()
+
+	written, err := io.Copy(dst, c.Request.Body)
+	if err != nil {
+		os.Remove(dstPath)
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "failed to write file"})
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{"filename": filename, "size": written})
+}
+
+func safeDestPath(baseDir, filename string) (string, error) {
+	clean := filepath.Base(filename) // strips any directory components
+	if clean == "." || clean == ".." || clean == "" {
+		return "", fmt.Errorf("invalid filename")
+	}
+
+	dst := filepath.Join(baseDir, clean)
+
+	absBase, err := filepath.Abs(baseDir)
+	if err != nil {
+		return "", err
+	}
+	absDst, err := filepath.Abs(dst)
+	if err != nil {
+		return "", err
+	}
+	if !strings.HasPrefix(absDst, absBase+string(os.PathSeparator)) && absDst != absBase {
+		return "", fmt.Errorf("invalid path")
+	}
+
+	return dst, nil
 }

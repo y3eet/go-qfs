@@ -1,5 +1,6 @@
 <script lang="ts">
     import { EllipsisVertical, FolderInput } from "@lucide/svelte";
+    import UploadModal from "./UploadModal.svelte";
 </script>
 
 <div class="navbar bg-base-100 shadow-sm">
@@ -7,6 +8,12 @@
         <p class="btn btn-ghost text-xl"><FolderInput />Go QFS</p>
     </div>
     <div class="flex-none">
-        <button class="btn btn-square btn-ghost"><EllipsisVertical /></button>
+        {#if window.go}
+            <button class="btn btn-square btn-ghost"
+                ><EllipsisVertical /></button
+            >
+        {:else}
+            <UploadModal />
+        {/if}
     </div>
 </div>

@@ -12,3 +12,14 @@ export async function downloadFile(filePath: string) {
   const encodedPath = cleanPath.split("/").map(encodeURIComponent).join("/");
   window.location.href = `${BASE_URL}/api/file/download/${encodedPath}`;
 }
+
+export async function uploadFile(file: File, path: string) {
+  return fetch(`${BASE_URL}/api/file/upload?path=${encodeURIComponent(path)}`, {
+    method: "POST",
+    body: file,
+    headers: {
+      "Content-Type": file.type,
+      "X-Filename": file.name,
+    },
+  });
+}

@@ -5,16 +5,10 @@ all: build test
 
 build:
 	@echo "Building..."
-	@go build -o main cmd/api/main.go
-
-build-all:
-	@echo "Building all..."
-	@cd frontend && bun install && bun run build
-	@go build -o main cmd/api/main.go
-
+	@wails build
 # Run the application
 run:
-	@go run main.go
+	@wails go run main.go
 
 # Test the application
 test:

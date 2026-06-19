@@ -4,10 +4,10 @@ tmp_dir = "tmp"
 
 [build]
   args_bin = []
-  bin = "./main"
-  cmd = "make build"
+  bin = "./build/bin/qfs"
+  cmd = "wails build"
   delay = 1000
-  exclude_dir = ["assets", "tmp", "vendor", "testdata", "node_modules"]
+  exclude_dir = ["assets", "tmp", "vendor", "testdata", "node_modules", "build", "static"]
   exclude_file = []
   exclude_regex = ["_test.go"]
   exclude_unchanged = false

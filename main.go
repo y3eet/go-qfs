@@ -58,7 +58,7 @@ func main() {
 	if len(os.Args) < 2 {
 		app := NewApp()
 		err := wails.Run(&options.App{
-			Title:  "wails-app",
+			Title:  "Go QFS",
 			Width:  1024,
 			Height: 768,
 			AssetServer: &assetserver.Options{

@@ -2,6 +2,7 @@ package config
 
 import (
 	"log"
+	"net"
 	"os"
 	"path/filepath"
 
@@ -13,6 +14,7 @@ type Config struct {
 	AppEnv      string
 	FrontendURL string
 	BaseDir     string
+	IP          string
 }
 
 var Cfg *Config
@@ -36,10 +38,13 @@ func Load() *Config {
 	}
 
 	dir := execDir()
-
 	// Load .env relative to the binary, not CWD
 	if err := godotenv.Load(filepath.Join(dir, ".env")); err != nil {
 		log.Println("No .env file found")
+	}
+	ip, err := getLocalIP()
+	if err != nil {
+		log.Println("Error getting IP")
 	}
 
 	Cfg = &Config{
@@ -47,6 +52,7 @@ func Load() *Config {
 		AppEnv:      getEnv("APP_ENV", "dev"),
 		FrontendURL: getEnv("FRONTEND_URL", "http://localhost:5173"),
 		BaseDir:     getEnv("BASE_DIR", "./"), // default to exe dir, not "./"
+		IP:          ip,
 	}
 
 	return Cfg
@@ -57,4 +63,15 @@ func getEnv(key, fallback string) string {
 		return value
 	}
 	return fallback
+}
+
+func getLocalIP() (string, error) {
+	conn, err := net.Dial("udp", "8.8.8.8:80")
+	if err != nil {
+		return "", err
+	}
+	defer conn.Close()
+
+	localAddr := conn.LocalAddr().(*net.UDPAddr)
+	return localAddr.IP.String(), nil
 }

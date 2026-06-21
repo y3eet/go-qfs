@@ -1,10 +1,14 @@
 # Go QFS(Quick File Share)
 
-QFS is a simple file sharing application built with Go. It allows users to download, upload and share files quickly and easily. No installation or configuration needed, just run the application on preferred directory and share the link with others or scan via qr code to share files.
+A lightweight desktop file-sharing application built in Go. Run the binary in any directory to instantly share its contents with any device on the same network. no installation, no configuration.
 
-## Getting Started
+## Usage
 
-These instructions will get you a copy of the project up and running on your local machine for development and testing purposes. See deployment for notes on how to deploy the project on a live system.
+1. Place the executable file in the directory you want to share
+2. Run it
+3. A local HTTP server starts and the app displays a QR code and connection address
+4. Connect from any device on the same network and scan the QR code or enter the address in a browser
+5. Upload or download files directly from that shared directory
 
 ## MakeFile
 

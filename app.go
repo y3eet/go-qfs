@@ -4,7 +4,6 @@ import (
 	"context"
 	"fmt"
 	"go-qfs/internal/config"
-	"net"
 )
 
 // App struct
@@ -31,16 +30,6 @@ func (a *App) Greet(name string) string {
 func (a *App) Test() {
 	fmt.Println("Test")
 }
-func getLocalIP() (string, error) {
-	conn, err := net.Dial("udp", "8.8.8.8:80")
-	if err != nil {
-		return "", err
-	}
-	defer conn.Close()
-
-	localAddr := conn.LocalAddr().(*net.UDPAddr)
-	return localAddr.IP.String(), nil
-}
 
 type ServerInfo struct {
 	Port string `json:"port"`
@@ -50,16 +39,11 @@ type ServerInfo struct {
 }
 
 func (a *App) GetServerInfo() ServerInfo {
-	ip, err := getLocalIP()
-	if err != nil {
-		fmt.Println("Error getting local IP:", err)
-		ip = "unknown"
-	}
 	return ServerInfo{
 		Port: config.Cfg.Port,
-		IP:   ip,
+		IP:   config.Cfg.Port,
 		Env:  config.Cfg.AppEnv,
-		Host: fmt.Sprintf("%s:%s", ip, config.Cfg.Port),
+		Host: fmt.Sprintf("%s:%s", config.Cfg.IP, config.Cfg.Port),
 	}
 
 }

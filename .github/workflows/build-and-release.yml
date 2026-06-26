@@ -9,14 +9,12 @@ jobs:
   build:
     strategy:
       matrix:
-        os: [ubuntu-latest, windows-latest, macos-latest]
+        os: [ubuntu-latest, windows-latest]
         include:
           - os: ubuntu-latest
             artifact_name: go-qfs-linux
           - os: windows-latest
             artifact_name: go-qfs-windows.exe
-          - os: macos-latest
-            artifact_name: go-qfs-macos
     runs-on: ${{ matrix.os }}
 
     steps:
@@ -54,8 +52,7 @@ jobs:
           if [ "${{ matrix.os }}" = "windows-latest" ]; then
             cp build/bin/*.exe dist/${{ matrix.artifact_name }}
           else
-            BIN=$(find build/bin -maxdepth 1 -type f | head -n 1)
-            cp "$BIN" dist/${{ matrix.artifact_name }}
+            cp build/bin/go-qfs dist/${{ matrix.artifact_name }}
           fi
 
       - name: Upload artifact

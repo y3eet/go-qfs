@@ -15,8 +15,6 @@ jobs:
             artifact_name: go-qfs-linux
           - os: windows-latest
             artifact_name: go-qfs-windows.exe
-          - os: macos-latest
-            artifact_name: go-qfs-macos
     runs-on: ${{ matrix.os }}
 
     steps:

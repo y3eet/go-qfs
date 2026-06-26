@@ -54,9 +54,9 @@ jobs:
         run: |
           mkdir -p dist
           if [ "${{ matrix.os }}" = "windows-latest" ]; then
-            cp build/bin/*.exe dist/${{ matrix.artifact_name }}
+            cp build/bin/qfs.exe dist/${{ matrix.artifact_name }}
           else
-            cp build/bin/go-qfs dist/${{ matrix.artifact_name }}
+            cp build/bin/qfs dist/${{ matrix.artifact_name }}
           fi
 
       - name: Upload artifact

@@ -45,6 +45,10 @@ jobs:
       - name: Build
         run: wails build -tags webkit2_41
 
+      - name: Debug build output
+        shell: bash
+        run: ls -la build/bin/
+
       - name: Rename binary
         shell: bash
         run: |

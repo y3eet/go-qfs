@@ -1,5 +1,5 @@
 import type { FileType } from "../types";
-const BASE_URL = "http://localhost:8080";
+const BASE_URL = "";
 
 export async function getFiles(path: string) {
   return await fetch(

@@ -59,6 +59,7 @@ jobs:
           if [ "${{ matrix.os }}" = "windows-latest" ]; then
             cp build/bin/qfs.exe dist/${{ matrix.artifact_name }}
           else
+            chmod +x build/bin/qfs
             cp build/bin/qfs dist/${{ matrix.artifact_name }}
           fi
 

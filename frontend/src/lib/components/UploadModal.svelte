@@ -2,9 +2,9 @@
     import { Plus, Upload } from "@lucide/svelte";
     import { uploadFile } from "../utils/api";
     import { directory } from "../state/directory.svelte";
-
+    import { fetchFiles } from "../state/files.svelte";
     let modal: HTMLDialogElement;
-    let files: FileList | undefined = $state();
+    let selectedFiles: FileList | undefined = $state();
     let isUploading: boolean = $state(false);
 
     function openModal() {
@@ -15,15 +15,16 @@
         modal.close();
     }
     async function handleUpload() {
-        if (!files || files.length === 0) return;
+        if (!selectedFiles || selectedFiles.length === 0) return;
         isUploading = true;
         try {
-            const promises = Array.from(files).map((file) =>
+            const promises = Array.from(selectedFiles).map((file) =>
                 uploadFile(file, directory.join("/")),
             );
             await Promise.all(promises);
             closeModal();
             isUploading = false;
+            await fetchFiles(directory);
         } catch (error) {
             console.error("Error uploading file:", error);
             isUploading = false;
@@ -48,7 +49,7 @@
         <div class="modal-box">
             <h3 class="text-lg font-bold">Upload File</h3>
             <input
-                bind:files
+                bind:files={selectedFiles}
                 type="file"
                 class="file-input file-input-bordered w-full mt-4"
                 multiple

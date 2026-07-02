@@ -2,18 +2,7 @@
     import { House } from "@lucide/svelte";
     import FilesList from "../components/FilesList.svelte";
     import { directory } from "../state/directory.svelte";
-    import type { FileType } from "../types";
-    import { getFiles } from "../utils/api";
-
-    let files: FileType[] = $state([]);
-    let fetchLoading = $state(true);
-
-    async function fetchFiles(dir: string[]) {
-        fetchLoading = true;
-        const f = await getFiles(dir.join("/"));
-        files = f;
-        fetchLoading = false;
-    }
+    import { fileStore, fetchFiles } from "../state/files.svelte";
 
     $effect(() => {
         fetchFiles(directory);
@@ -40,10 +29,10 @@
             {/each}
         </ul>
     </div>
-    {#if fetchLoading}
+    {#if fileStore.fetchLoading}
         <div class="flex items-center justify-center h-64">
             <span class="loading loading-spinner loading-lg"></span>
         </div>
     {/if}
-    <FilesList {files} />
+    <FilesList files={fileStore.files} />
 </section>

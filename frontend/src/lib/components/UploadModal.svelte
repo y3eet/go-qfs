@@ -5,6 +5,7 @@
 
     let modal: HTMLDialogElement;
     let files: FileList | undefined = $state();
+    let isUploading: boolean = $state(false);
 
     function openModal() {
         modal.showModal();
@@ -15,18 +16,31 @@
     }
     async function handleUpload() {
         if (!files || files.length === 0) return;
-        const file = files[0];
+        isUploading = true;
         try {
-            await uploadFile(file, directory.join("/"));
+            const promises = Array.from(files).map((file) =>
+                uploadFile(file, directory.join("/")),
+            );
+            await Promise.all(promises);
+            closeModal();
+            isUploading = false;
         } catch (error) {
             console.error("Error uploading file:", error);
+            isUploading = false;
             return;
         }
     }
 </script>
 
 <section>
-    <button class="btn btn-dash btn-primary" onclick={openModal}>
+    <button
+        disabled={isUploading}
+        class="btn btn-dash btn-primary"
+        onclick={openModal}
+    >
+        {#if isUploading}
+            <span class="loading loading-spinner loading-md"></span>
+        {/if}
         <Plus /></button
     >
 
@@ -37,6 +51,7 @@
                 bind:files
                 type="file"
                 class="file-input file-input-bordered w-full mt-4"
+                multiple
             />
 
             <div class="modal-action">

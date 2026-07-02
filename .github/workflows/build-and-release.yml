@@ -61,13 +61,14 @@ jobs:
           else
             chmod +x build/bin/qfs
             cp build/bin/qfs dist/${{ matrix.artifact_name }}
+            tar -czf dist/${{ matrix.artifact_name }}.tar.gz -C build/bin qfs
           fi
 
       - name: Upload artifact
         uses: actions/upload-artifact@v4
         with:
           name: ${{ matrix.artifact_name }}
-          path: dist/${{ matrix.artifact_name }}
+          path: dist/${{ matrix.artifact_name }}*
 
   release:
     needs: build
@@ -81,6 +82,7 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           path: dist
+          merge-multiple: true
 
       - name: Generate changelog
         id: changelog

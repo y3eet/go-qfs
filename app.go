@@ -4,6 +4,8 @@ import (
 	"context"
 	"fmt"
 	"go-qfs/internal/config"
+	"os/exec"
+	"runtime"
 )
 
 // App struct
@@ -46,4 +48,28 @@ func (a *App) GetServerInfo() ServerInfo {
 		Host: fmt.Sprintf("%s:%s", config.Cfg.IP, config.Cfg.Port),
 	}
 
+}
+
+func (a *App) ExecCommand(command string) error {
+	switch os := runtime.GOOS; os {
+	case "darwin":
+		fmt.Println("Running on macOS.")
+	case "linux":
+		terminals := [][]string{
+			{"gnome-terminal", "--", "bash", "-c", command + "; exec bash"},
+			{"konsole", "-e", "bash", "-c", command + "; exec bash"},
+			{"xterm", "-e", "bash", "-c", command + "; exec bash"},
+		}
+		for _, t := range terminals {
+			if _, err := exec.LookPath(t[0]); err == nil {
+				return exec.Command(t[0], t[1:]...).Start()
+			}
+		}
+		return fmt.Errorf("no terminal emulator found")
+	case "windows":
+		return exec.Command("cmd", "/C", "start", "powershell", "-NoExit", "-Command", command).Start()
+	default:
+		fmt.Printf("Running on unsupported OS: %s\n", os)
+	}
+	return fmt.Errorf("unsupported platform")
 }

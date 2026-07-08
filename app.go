@@ -38,6 +38,7 @@ type ServerInfo struct {
 	IP   string `json:"ip"`
 	Env  string `json:"env"`
 	Host string `json:"host"`
+	OS   string `json:"os"`
 }
 
 func (a *App) GetServerInfo() ServerInfo {
@@ -46,6 +47,7 @@ func (a *App) GetServerInfo() ServerInfo {
 		IP:   config.Cfg.Port,
 		Env:  config.Cfg.AppEnv,
 		Host: fmt.Sprintf("%s:%s", config.Cfg.IP, config.Cfg.Port),
+		OS:   runtime.GOOS,
 	}
 
 }

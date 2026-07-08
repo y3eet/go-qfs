@@ -5,6 +5,7 @@ export namespace main {
 	    ip: string;
 	    env: string;
 	    host: string;
+	    os: string;
 	
 	    static createFrom(source: any = {}) {
 	        return new ServerInfo(source);
@@ -16,6 +17,7 @@ export namespace main {
 	        this.ip = source["ip"];
 	        this.env = source["env"];
 	        this.host = source["host"];
+	        this.os = source["os"];
 	    }
 	}
 

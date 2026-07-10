@@ -24,8 +24,8 @@
         },
         windows: {
             powershell: {
-                exposePort: `New-NetFirewallRule -DisplayName "Allow Port ${info.port}" -Direction Inbound -LocalPort ${info.port} -Protocol TCP -Action Allow`,
-                closePort: `Remove-NetFirewallRule -DisplayName "Allow Port ${info.port}"`,
+                exposePort: `Start-Process powershell -Verb RunAs -ArgumentList '-Command New-NetFirewallRule -DisplayName "Allow Port ${info.port} Private" -Direction Inbound -LocalPort ${info.port} -Protocol TCP -Action Allow -Profile Private'`,
+                closePort: `Start-Process powershell -Verb RunAs -ArgumentList '-Command Remove-NetFirewallRule -DisplayName "Allow Port ${info.port} Private"'`,
             },
         },
     });

@@ -78,12 +78,13 @@ func (h *FileHandler) UploadFile(c *gin.Context) {
 	}
 
 	dstPath, err := safeDestPath(uploadDir, filename)
+	fmt.Printf("Path: %s", dstPath)
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
-
-	dst, err := os.Create(dstPath)
+	safeName, err := safeFileName(dstPath)
+	dst, err := os.Create(safeName)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "failed to create file"})
 		return
@@ -121,4 +122,24 @@ func safeDestPath(baseDir, filename string) (string, error) {
 	}
 
 	return dst, nil
+}
+
+func safeFileName(path string) (string, error) {
+	if _, err := os.Stat(path); os.IsNotExist(err) {
+		return path, nil
+	} else if err != nil {
+		return "", err
+	}
+
+	ext := filepath.Ext(path)
+	base := strings.TrimSuffix(path, ext)
+
+	for count := 1; ; count++ {
+		candidate := fmt.Sprintf("%s(%d)%s", base, count, ext)
+		if _, err := os.Stat(candidate); os.IsNotExist(err) {
+			return candidate, nil
+		} else if err != nil {
+			return "", err
+		}
+	}
 }
